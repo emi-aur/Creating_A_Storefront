@@ -8,40 +8,40 @@ const database_1 = __importDefault(require("../database"));
 const index = async () => {
     try {
         const conn = await database_1.default.connect();
-        const sql = "SELECT * FROM products";
+        const sql = "SELECT * FROM orders";
         const result = await conn.query(sql);
         conn.release();
         return result.rows;
     }
     catch (err) {
-        throw new Error(`Fehler beim Laden der Produkte: ${err}`);
+        throw new Error(`Fehler beim Laden der Bestellungen: ${err}`);
     }
 };
 exports.index = index;
 const show = async (id) => {
     try {
         const conn = await database_1.default.connect();
-        const sql = "SELECT * FROM products WHERE id=($1)";
+        const sql = "SELECT * FROM orders WHERE id=($1)";
         const result = await conn.query(sql, [id]);
         conn.release();
         return result.rows[0];
     }
     catch (err) {
-        throw new Error(`Fehler beim Finden des Produkts: ${err}`);
+        throw new Error(`Fehler beim Finden der Bestellung: ${err}`);
     }
 };
 exports.show = show;
-const create = async (p) => {
+const create = async (o) => {
     try {
         const conn = await database_1.default.connect();
-        const sql = "INSERT INTO products (name, price) VALUES($1,$2) RETURNING *";
-        const result = await conn.query(sql, [p.name, p.price]);
-        const product = result.rows[0];
+        const sql = "INSERT INTO orders (user_id, order_status) VALUES($1,$2) RETURNING *";
+        const result = await conn.query(sql, [o.user_id, o.order_status]);
+        const order = result.rows[0];
         conn.release();
-        return product;
+        return order;
     }
     catch (err) {
-        throw new Error(`Fehler beim Erstellen des Produkts: ${err}`);
+        throw new Error(`Fehler beim Erstellen der Bestellung: ${err}`);
     }
 };
 exports.create = create;

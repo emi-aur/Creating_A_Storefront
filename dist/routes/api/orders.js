@@ -37,39 +37,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const ProductModel = __importStar(require("../../models/products"));
+const OrderModel = __importStar(require("../../models/orders"));
 const auth_1 = require("../../middleware/auth");
-const products = express_1.default.Router();
-products.get("/", async (req, res) => {
+const orders = express_1.default.Router();
+orders.get("/", auth_1.verifyAuthToken, async (req, res) => {
     try {
-        const allProducts = await ProductModel.index(); // Annahme: Methode index() gibt alles zurück
-        res.status(200).json(allProducts);
+        const allOrdes = await OrderModel.index();
+        res.status(200).json(allOrdes);
     }
     catch (err) {
-        res.status(500).json({ error: "Fehler beim Laden der Produktliste." });
+        res.status(500).json({ error: "Fehler beim Laden der Bestellliste." });
     }
 });
-products.get("/:id", async (req, res) => {
+orders.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const productData = await ProductModel.show(id);
-        if (!productData) {
-            return res.status(404).json({ error: "Produkt nicht gefunden." });
+        const orderData = await OrderModel.show(id);
+        if (!orderData) {
+            return res.status(404).json({ error: "Bestellung nicht gefunden." });
         }
-        res.status(200).json(productData);
+        res.status(200).json(orderData);
     }
     catch (err) {
-        res.status(500).json({ error: "Fehler beim Abrufen des Produkts." });
+        res.status(500).json({ error: "Fehler beim Abrufen der Bestellung." });
     }
 });
-products.post("/", auth_1.verifyAuthToken, async (req, res) => {
-    const { name, price } = req.body;
+orders.post("/", async (req, res) => {
+    const { user_id, order_id, quantity, order_status } = req.body;
     try {
-        const newProduct = await ProductModel.create({ name, price });
-        res.status(201).json(newProduct);
+        const newOrder = await OrderModel.create({
+            user_id,
+            order_id,
+            quantity,
+            order_status,
+        });
+        res.status(201).json(newOrder);
     }
     catch (err) {
-        res.status(500).json({ error: "Produkt konnte nicht erstellt werden." });
+        res
+            .status(500)
+            .json({ error: "Bestellung konnte nicht erstellt werden." });
     }
 });
-exports.default = products;
+exports.default = orders;

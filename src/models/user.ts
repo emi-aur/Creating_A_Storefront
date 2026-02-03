@@ -1,7 +1,5 @@
-
-
-import Client from "../database"; 
-import dotenv from 'dotenv';
+import Client from "../database";
+import dotenv from "dotenv";
 
 export type User = {
   id?: number;
@@ -18,7 +16,7 @@ const saltRounds = process.env.SALT_ROUNDS as string;
 export const index = async (): Promise<User[]> => {
   try {
     const conn = await Client.connect();
-    const sql = 'SELECT id, firstname, lastname FROM users';
+    const sql = "SELECT id, firstname, lastname FROM users";
     const result = await conn.query(sql);
     conn.release();
     return result.rows;
@@ -30,7 +28,7 @@ export const index = async (): Promise<User[]> => {
 export const show = async (id: string): Promise<User> => {
   try {
     const conn = await Client.connect();
-    const sql = 'SELECT id, firstname, lastname FROM users WHERE id=($1)';
+    const sql = "SELECT id, firstname, lastname FROM users WHERE id=($1)";
     const result = await conn.query(sql, [id]);
     conn.release();
     return result.rows[0];
@@ -40,17 +38,51 @@ export const show = async (id: string): Promise<User> => {
 };
 
 export const create = async (u: User): Promise<User> => {
-try {
+  try {
     const conn = await Client.connect();
-    const sql = 'INSERT INTO users (firstname, lastname, password_digest) VALUES($1, $2, $3) RETURNING id, firstname, lastname';
-    const bcrypt = require('bcrypt');
-    const hashedPassword = bcrypt.hashSync(u.password_digest + pepper, parseInt(saltRounds));
-    const result = await conn.query(sql, [u.firstname, u.lastname, hashedPassword]);
+    const sql =
+      "INSERT INTO users (firstname, lastname, password_digest) VALUES($1, $2, $3) RETURNING id, firstname, lastname";
+    const bcrypt = require("bcrypt");
+    const hashedPassword = bcrypt.hashSync(
+      u.password_digest + pepper,
+      parseInt(saltRounds)
+    );
+    const result = await conn.query(sql, [
+      u.firstname,
+      u.lastname,
+      hashedPassword,
+    ]);
     const user = result.rows[0];
     conn.release();
     return user;
   } catch (err) {
     throw new Error(`Fehler beim Erstellen: ${err}`);
   }
-}
+};
 
+export const authenticate = async (
+  firstname: string,
+  lastname: string,
+  password: string
+): Promise<User | null> => {
+  try {
+    const conn = await Client.connect();
+    const sql = "SELECT * FROM users WHERE firstname=($1) AND lastname=($2)";
+    const result = await conn.query(sql, [firstname, lastname]);
+
+    if (result.rows.length) {
+      const user = result.rows[0];
+      const bcrypt = require("bcrypt");
+
+      if (bcrypt.compareSync(password + pepper, user.password_digest)) {
+        conn.release();
+        return user;
+      }
+    }
+
+    conn.release();
+    return null;
+  } catch (err) {
+    throw new Error(`Fehler bei der Authentifizierung: ${err}`);
+  }
+};
