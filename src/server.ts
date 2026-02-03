@@ -2,14 +2,15 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 
 const app: express.Application = express();
-const address: string = "0.0.0.0:3000";
+const host: string = "0.0.0.0";
+const port: number = 3000;
 
 app.use(bodyParser.json());
 
 app.get("/", function (req: Request, res: Response) {
-  res.send("Hello World!");
+  res.send("Hello World<3");
 });
 
-app.listen(3000, function () {
-  console.log(`starting app on: ${address}`);
+app.listen(port, host, function () {
+  console.log(`Server läuft auf: http://localhost:${port}`);
 });
