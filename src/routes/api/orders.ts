@@ -4,7 +4,7 @@ import * as OrderModel from "../../models/orders";
 const orders = express.Router();
 
 orders.get("/", async (req: express.Request, res: express.Response): Promise<void> => {
-    try{
+    try {
         const allOrdes = await OrderModel.index()
         res.status(200).json(allOrdes);
     }
@@ -13,7 +13,7 @@ orders.get("/", async (req: express.Request, res: express.Response): Promise<voi
     }
 })
 
-orders.get("/:id", async (req: express.Request<{id: string}>, res: express.Response) => {
+orders.get("/:id", async (req: express.Request<{ id: string }>, res: express.Response) => {
     const { id } = req.params;
     try {
         const orderData = await OrderModel.show(id);
@@ -26,10 +26,10 @@ orders.get("/:id", async (req: express.Request<{id: string}>, res: express.Respo
     }
 });
 
-orders.post("/", async (req: express.Request<{},{}, {user_id: number; order_id: number; quantity: number; status: boolean}>, res: express.Response) => {
-    const { user_id, order_id, quantity, status } = req.body;
+orders.post("/", async (req: express.Request<{}, {}, { user_id: number; order_id: number; quantity: number; order_status: boolean }>, res: express.Response) => {
+    const { user_id, order_id, quantity, order_status } = req.body;
     try {
-        const newOrder = await OrderModel.create({ user_id, order_id, quantity, status });
+        const newOrder = await OrderModel.create({ user_id, order_id, quantity, order_status });
         res.status(201).json(newOrder);
     } catch (err) {
         res.status(500).json({ error: 'Bestellung konnte nicht erstellt werden.' });
