@@ -22,7 +22,7 @@ orders.get(
   async (req: express.Request<{ id: string }>, res: express.Response) => {
     const { id } = req.params;
     try {
-      const orderData = await OrderModel.show(id);
+      const orderData = await OrderModel.getOrderWithProducts(id);
       if (!orderData) {
         return res.status(404).json({ error: "Bestellung nicht gefunden." });
       }
@@ -41,19 +41,15 @@ orders.post(
       {},
       {
         user_id: number;
-        order_id: number;
-        quantity: number;
         order_status: boolean;
       }
     >,
     res: express.Response
   ) => {
-    const { user_id, order_id, quantity, order_status } = req.body;
+    const { user_id, order_status } = req.body;
     try {
       const newOrder = await OrderModel.create({
         user_id,
-        order_id,
-        quantity,
         order_status,
       });
       res.status(201).json(newOrder);
@@ -64,5 +60,36 @@ orders.post(
     }
   }
 );
+
+// Route zum Hinzufügen von Produkten zu einer Bestellung
+orders.post(
+  "/:id/products",
+  verifyAuthToken,
+  async (
+    req: express.Request<
+      { id: string },
+      {},
+      { product_id: number; quantity: number }
+    >,
+    res: express.Response
+  ) => {
+    const { id } = req.params;
+    const { product_id, quantity } = req.body;
+
+    try {
+      const orderProduct = await OrderModel.addProductToOrder({
+        order_id: parseInt(id),
+        product_id,
+        quantity,
+      });
+      res.status(201).json(orderProduct);
+    } catch (err) {
+      res.status(500).json({
+        error: "Produkt konnte nicht zur Bestellung hinzugefügt werden."
+      });
+    }
+  }
+);
+
 
 export default orders;
