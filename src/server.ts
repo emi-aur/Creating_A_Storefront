@@ -18,6 +18,11 @@ app.get("/", function (req: Request, res: Response) {
 
 app.use("/api", routes);
 
-app.listen(port, host, function () {
-  console.log(`Server läuft auf: http://localhost:${port}`);
-});
+// Nur starten, wenn direkt ausgeführt (nicht in Tests)
+if (require.main === module) {
+  app.listen(port, host, function () {
+    console.log(`Server läuft auf: http://localhost:${port}`);
+  });
+}
+
+export default app;

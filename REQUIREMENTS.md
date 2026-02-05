@@ -34,16 +34,12 @@ These are the notes from a meeting with the frontend developer that describe wha
 - price
 - [OPTIONAL] category
 
-Table: product (id:serial primary Key, name:varchar, price:number)
-
 #### User
 
 - id
 - firstName
 - lastName
 - password
-
-Table: users (id: serial Primary key, firstName:varchar(100), lastName:varchar(100), password:varchar(100))
 
 #### Orders
 
@@ -53,4 +49,30 @@ Table: users (id: serial Primary key, firstName:varchar(100), lastName:varchar(1
 - user_id
 - status of order (active or complete)
 
-Table: orders (id:serial primary key, id_product:integer [foreinkey to products table], quantity_product:numeric, user_id: integer [forein key to user Table], order_status:boolean)
+-- Table for user
+CREATE TABLE users (
+id SERIAL PRIMARY KEY
+lastname VARCHAR(100)
+password_digest VARCHAR(100) NOT NULL
+);
+-- Table for products
+CREATE TABLE products (
+id SERIAL PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+price DECIMAL(10, 2) NOT NULL
+);
+
+-- Table for orders
+CREATE TABLE orders (
+id SERIAL PRIMARY KEY,
+user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+order_status VARCHAR(50) DEFAULT 'active'
+);
+
+-- NEW: Table order_products
+CREATE TABLE order_products (
+id SERIAL PRIMARY KEY,
+order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
+product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+quantity INTEGER NOT NULL CHECK (quantity > 0)
+);

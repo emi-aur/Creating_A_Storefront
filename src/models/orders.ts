@@ -76,7 +76,9 @@ export const addProductToOrder = async (
     conn.release();
     return result.rows[0];
   } catch (err) {
-    throw new Error(`Fehler beim Hinzufügen des Produkts zur Bestellung: ${err}`);
+    throw new Error(
+      `Fehler beim Hinzufügen des Produkts zur Bestellung: ${err}`
+    );
   }
 };
 
@@ -100,13 +102,13 @@ export const getOrderWithProducts = async (
     // Hole die Produkte für diese Bestellung
     const productsSql = `
       SELECT 
-        orderproduct.product_id,
-        product.name as product_name,
-        orderproduct.quantity,
-        product.price
-      FROM order_products 
-      INNER JOIN products  ON order_products.product_id = products.id
-      WHERE order_products.order_id=$1
+        op.product_id,
+        p.name as product_name,
+        op.quantity,
+        p.price
+      FROM order_products op
+      INNER JOIN products p ON op.product_id = p.id
+      WHERE op.order_id=$1
     `;
     const productsResult = await conn.query(productsSql, [orderId]);
 
@@ -120,4 +122,3 @@ export const getOrderWithProducts = async (
     throw new Error(`Fehler beim Laden der Bestellung mit Produkten: ${err}`);
   }
 };
-

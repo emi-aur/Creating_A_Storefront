@@ -35,6 +35,7 @@ orders.get(
 
 orders.post(
   "/",
+  verifyAuthToken,
   async (
     req: express.Request<
       {},
@@ -85,11 +86,10 @@ orders.post(
       res.status(201).json(orderProduct);
     } catch (err) {
       res.status(500).json({
-        error: "Produkt konnte nicht zur Bestellung hinzugefügt werden."
+        error: "Produkt konnte nicht zur Bestellung hinzugefügt werden.",
       });
     }
   }
 );
-
 
 export default orders;

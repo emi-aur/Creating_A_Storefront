@@ -13,7 +13,7 @@
 - **CORS** - Cross-Origin Resource Sharing
 - **dotenv** - Environment variable management
 
-##  Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the Repository
 
@@ -69,7 +69,6 @@ TOKEN_SECRET=your-jwt-secret-token-here
 ENV=dev
 ```
 
-
 ### 5. Run Database Migrations
 
 ```bash
@@ -77,11 +76,12 @@ db-migrate up
 ```
 
 This creates the following tables:
+
 - `products` - Product catalog
 - `users` - User accounts with hashed passwords
 - `orders` - Order information
 
-##  Running the Application
+## Running the Application
 
 ### Development Mode (with auto-reload)
 
@@ -108,30 +108,30 @@ npm test
 
 ### Products
 
-| Method | Endpoint | Auth Required | Description |
-|--------|----------|---------------|-------------|
-| GET | `/api/products` | ❌ No | Get all products |
-| GET | `/api/products/:id` | ❌ No | Get product by ID |
-| POST | `/api/products` | ✅ Yes | Create new product |
+| Method | Endpoint            | Auth Required | Description        |
+| ------ | ------------------- | ------------- | ------------------ |
+| GET    | `/api/products`     | ❌ No         | Get all products   |
+| GET    | `/api/products/:id` | ❌ No         | Get product by ID  |
+| POST   | `/api/products`     | ✅ Yes        | Create new product |
 
 ### Users
 
-| Method | Endpoint | Auth Required | Description |
-|--------|----------|---------------|-------------|
-| POST | `/api/users` | ❌ No | Register new user |
-| POST | `/api/users/login` | ❌ No | Login and get JWT token |
-| GET | `/api/users` | ✅ Yes | Get all users |
-| GET | `/api/users/:id` | ✅ Yes | Get user by ID |
+| Method | Endpoint           | Auth Required | Description             |
+| ------ | ------------------ | ------------- | ----------------------- |
+| POST   | `/api/users`       | ❌ No         | Register new user       |
+| POST   | `/api/users/login` | ❌ No         | Login and get JWT token |
+| GET    | `/api/users`       | ✅ Yes        | Get all users           |
+| GET    | `/api/users/:id`   | ✅ Yes        | Get user by ID          |
 
 ### Orders
 
-| Method | Endpoint | Auth Required | Description |
-|--------|----------|---------------|-------------|
-| GET | `/api/orders` | ✅ Yes | Get all orders |
-| GET | `/api/orders/:id` | ❌ No | Get order by ID |
-| POST | `/api/orders` | ❌ No | Create new order |
+| Method | Endpoint          | Auth Required | Description      |
+| ------ | ----------------- | ------------- | ---------------- |
+| GET    | `/api/orders`     | ✅ Yes        | Get all orders   |
+| GET    | `/api/orders/:id` | ❌ No         | Get order by ID  |
+| POST   | `/api/orders`     | ❌ No         | Create new order |
 
-##  Authentication
+## Authentication
 
 This API uses JWT (JSON Web Tokens) for authentication.
 
@@ -160,6 +160,7 @@ curl -X POST http://localhost:3000/api/users/login \
 ```
 
 **Response:**
+
 ```json
 {
   "user": {
@@ -183,7 +184,7 @@ curl -X POST http://localhost:3000/api/products \
   }'
 ```
 
-##  Testing
+## Testing
 
 The project includes comprehensive test suites for all models:
 
@@ -196,11 +197,12 @@ npm test
 ```
 
 Test files are located in `src/models/tests/`:
+
 - `user.spec.ts` - User model tests
 - `products.spec.ts` - Product model tests
 - `orders.spec.ts` - Order model tests
 
-##  Project Structure
+## Project Structure
 
 ```
 Creating_A_Storefront/
@@ -237,9 +239,10 @@ Creating_A_Storefront/
 - **Environment Variables:** Sensitive data stored in `.env` (not committed)
 - **CORS Enabled:** Cross-origin requests allowed for frontend integration
 
-##  Database Schema
+## Database Schema
 
 ### Products Table
+
 ```sql
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
@@ -249,6 +252,7 @@ CREATE TABLE products (
 ```
 
 ### Users Table
+
 ```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -259,6 +263,7 @@ CREATE TABLE users (
 ```
 
 ### Orders Table
+
 ```sql
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,

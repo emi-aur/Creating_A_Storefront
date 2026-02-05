@@ -14,7 +14,7 @@ const {
   POSTGRES_DB,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
-  POSTGRES_TEST_DB
+  POSTGRES_TEST_DB,
 } = process.env;
 
 const dbName = ENV === "test" ? POSTGRES_TEST_DB : POSTGRES_DB;
