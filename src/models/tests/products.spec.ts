@@ -6,7 +6,7 @@ describe("Product Model", () => {
   let createdProductId: number;
   let createdUserId: number;
 
-  // Create a test product first
+  // Create a test user first
     beforeAll(async () => {
       const testUser = await UserModel.create({
         firstname: "Test",

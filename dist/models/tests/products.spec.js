@@ -38,7 +38,7 @@ const UserModel = __importStar(require("../user"));
 describe("Product Model", () => {
     let createdProductId;
     let createdUserId;
-    // Create a test product first
+    // Create a test user first
     beforeAll(async () => {
         const testUser = await UserModel.create({
             firstname: "Test",
