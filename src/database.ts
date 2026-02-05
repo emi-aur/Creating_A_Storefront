@@ -9,10 +9,10 @@ dotenv.config();
 // Verwende gespeicherte ENV oder die aus .env
 const ENV = currentEnv || process.env.ENV;
 
-const { 
-  POSTGRES_HOST, 
-  POSTGRES_DB, 
-  POSTGRES_USER, 
+const {
+  POSTGRES_HOST,
+  POSTGRES_DB,
+  POSTGRES_USER,
   POSTGRES_PASSWORD,
   POSTGRES_TEST_DB
 } = process.env;
